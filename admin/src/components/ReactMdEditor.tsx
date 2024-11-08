@@ -177,14 +177,6 @@ const Editor: FunctionComponent<EditorProps> = ({
     return customCommands;
   }, [JSON.stringify(configs)]);
 
-  useEffect(() => {
-    fetch(`/${pluginId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setConfigs(data);
-      });
-  }, []);
-
   return (
     <Flex gap={4}>
       <Box>
