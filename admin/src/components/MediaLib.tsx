@@ -13,7 +13,7 @@ const MediaLib = ( { isOpen = false, onChange = (formattedFiles: { alt: any; url
   const { components } = useStrapiApp( 'library', app => app );
   const MediaLibraryDialog = components[ 'media-library' ] as unknown as React.FunctionComponent<{
     onClose: () => void
-    onSelectAssets: () => void
+    onSelectAssets: (images: Schema.Attribute.MediaValue<true>) => void
   }>;
 
   const handleSelectAssets = (images: Schema.Attribute.MediaValue<true>) => {
