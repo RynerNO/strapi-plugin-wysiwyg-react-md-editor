@@ -72,7 +72,7 @@
     "watch:link": "strapi-plugin watch:link"
   },
   "dependencies": {
-    "@uiw/react-md-editor": "^4.0.0"
+    "@uiw/react-md-editor": "^4.0.4"
   },
   "devDependencies": {
     "@strapi/icons": "2.0.0-rc.11",
