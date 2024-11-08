@@ -1,60 +1,45 @@
-import { FC as FunctionComponent } from "react";
+import PropTypes from 'prop-types';
+import { useStrapiApp } from '@strapi/strapi/admin';
+import type { Schema } from '@strapi/types';
 
-import { useStrapiApp } from "@strapi/admin/strapi-admin";
-import type { Schema } from "@strapi/types";
-
-const prefixFileUrlWithBackendUrl = (fileURL: string) => {
-  return !!fileURL &&
-    fileURL.startsWith("/") &&
-    "strapi" in window &&
-    window.strapi instanceof Object &&
-    "backendURL" in window.strapi &&
-    window.strapi.backendURL
-    ? `${window.strapi.backendURL}${fileURL}`
-    : fileURL;
+function prefixFileUrlWithBackendUrl ( fileURL:string ) {
+  return !!fileURL && fileURL.startsWith('/') ? `${ (window as any).strapi.backendURL }${ fileURL }` : fileURL;
 };
 
-interface MediaLibComponentProps {
-  isOpen: boolean;
-  onChange: (files: Schema.Attribute.MediaValue<true>) => void;
-  onToggle: () => void;
-}
 
-const MediaLib: FunctionComponent<MediaLibComponentProps> = ({
-  isOpen,
-  onChange,
-  onToggle,
-}) => {
-  const components = useStrapiApp("ImageDialog", (state) => state.components);
-  if (!components || !isOpen) return null;
 
-  const MediaLibraryDialog = components["media-library"] as FunctionComponent<{
-    onClose: () => void;
-    onSelectAssets: (_images: Schema.Attribute.MediaValue<true>) => void;
+
+const MediaLib = ( { isOpen = false, onChange = (formattedFiles: {alt: any, url: string, mime: any}[]) => {}, onToggle = () => {} } ) => {
+  const { components } = useStrapiApp( 'library', app => app );
+  const MediaLibraryDialog = components[ 'media-library' ] as unknown as React.FunctionComponent<{
+    onClose: () => void
+    onSelectAssets: (assets: Schema.Attribute.MediaValue<true>) => void
   }>;
 
-  const handleSelectAssets = (files: Schema.Attribute.MediaValue<true>) => {
-    const formattedFiles = files.map((f) => ({
+  const handleSelectAssets = (assets: Schema.Attribute.MediaValue<true>) => {
+    const formattedFiles = assets.map(f => ( {
       alt: f.alternativeText || f.name,
-      url: prefixFileUrlWithBackendUrl(f.url),
+      url: prefixFileUrlWithBackendUrl( f.url ),
       mime: f.mime,
-    }));
+    } ) );
 
-    onChange(formattedFiles);
+    onChange( formattedFiles );
   };
 
-  return (
-    <MediaLibraryDialog
-      onClose={onToggle}
-      onSelectAssets={handleSelectAssets}
-    />
+  if ( !isOpen ) {
+    return null
+  };
+
+  return(
+    
+    <MediaLibraryDialog onClose={ onToggle } onSelectAssets={ handleSelectAssets } />
   );
 };
 
-MediaLib.defaultProps = {
-  isOpen: false,
-  onChange: (_files: Schema.Attribute.MediaValue<true>) => {},
-  onToggle: () => {},
+MediaLib.propTypes = {
+  isOpen: PropTypes.bool,
+  onChange: PropTypes.func,
+  onToggle: PropTypes.func,
 };
 
-export { MediaLib };
+export default MediaLib;

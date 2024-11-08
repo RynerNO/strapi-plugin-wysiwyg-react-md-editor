@@ -9,7 +9,7 @@ import { styled } from "styled-components";
 import "@uiw/react-markdown-preview/markdown.css";
 
 import pluginId from "../pluginId";
-import { MediaLib } from "./MediaLib";
+import MediaLib  from "./MediaLib";
 import { useField } from "@strapi/strapi/admin";
 
 const Wrapper = styled.div`
@@ -207,11 +207,11 @@ const Editor: FunctionComponent<EditorProps> = ({
           }}
         />
         <div style={{ padding: "50px 0 0 0" }} />
-        {/* <MediaLib
+        {<MediaLib
           isOpen={mediaLibVisible}
           onChange={handleChangeAssets}
           onToggle={handleToggleMediaLib}
-        /> */}
+        /> }
       </Wrapper>
       {error && (
         <Typography variant="pi" textColor="danger600">
