@@ -9,15 +9,15 @@ function prefixFileUrlWithBackendUrl ( fileURL:string ) {
 
 
 
-const MediaLib = ( { isOpen = false, onChange = (formattedFiles: {alt: any, url: string, mime: any}[]) => {}, onToggle = () => {} } ) => {
+const MediaLib = ( { isOpen = false, onChange = (formattedFiles: { alt: any; url: string; mime: any; }[]) => {}, onToggle = () => {} } ) => {
   const { components } = useStrapiApp( 'library', app => app );
   const MediaLibraryDialog = components[ 'media-library' ] as unknown as React.FunctionComponent<{
     onClose: () => void
-    onSelectAssets: (assets: Schema.Attribute.MediaValue<true>) => void
+    onSelectAssets: () => void
   }>;
 
-  const handleSelectAssets = (assets: Schema.Attribute.MediaValue<true>) => {
-    const formattedFiles = assets.map(f => ( {
+  const handleSelectAssets = (images: Schema.Attribute.MediaValue<true>) => {
+    const formattedFiles = images.map(f => ( {
       alt: f.alternativeText || f.name,
       url: prefixFileUrlWithBackendUrl( f.url ),
       mime: f.mime,
