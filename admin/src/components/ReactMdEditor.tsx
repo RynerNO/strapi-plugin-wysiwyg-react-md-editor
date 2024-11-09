@@ -1,14 +1,14 @@
-import { FC as FunctionComponent, useState, useEffect, useMemo } from "react";
+import { FC as FunctionComponent, useState, useMemo } from "react";
 
 import { Box, Flex, Typography } from "@strapi/design-system";
 import type { Schema } from "@strapi/types";
 import MDEditor, { commands, ICommand } from "@uiw/react-md-editor";
-import { useIntl } from "react-intl";
 import { styled } from "styled-components";
+// @ts-ignore
+import markdownCss from "@uiw/react-markdown-preview/markdown.css?inline";
+// @ts-ignore
+import editorCss from "@uiw/react-md-editor/markdown-editor.css?inline";
 
-import "@uiw/react-markdown-preview/markdown.css";
-
-import pluginId from "../pluginId";
 import MediaLib  from "./MediaLib";
 import { useField } from "@strapi/strapi/admin";
 
@@ -56,7 +56,6 @@ const Wrapper = styled.div`
     list-style: auto;
   }
 `;
-
 interface EditorProps {
   name: string;
   onChange: (e: { target: { name: string; value: string } }) => void;
@@ -115,7 +114,6 @@ const Editor: FunctionComponent<EditorProps> = ({
     onChange({ target: { name, value: newValue ?? "" } });
     handleToggleMediaLib();
   };
-
   const [configs, setConfigs] = useState<{ toolbarCommands?: string[] }>({});
 
   const toolbarCommands = useMemo(() => {
@@ -178,7 +176,10 @@ const Editor: FunctionComponent<EditorProps> = ({
   }, [JSON.stringify(configs)]);
 
   return (
+    
     <Flex gap={4}>
+      <style>{markdownCss}</style>
+      <style>{editorCss}</style>
       <Box>
         <Typography variant="pi" fontWeight="bold">
           {formatMessage(intlLabel)}
